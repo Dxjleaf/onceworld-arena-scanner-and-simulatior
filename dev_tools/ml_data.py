@@ -13,9 +13,8 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
+import user_config
 from detect_common import (
-    DEFAULT_ANCHOR_SCALES,
-    DEFAULT_ANCHOR_THRESHOLD,
     ENEMY_BOX_ASPECT_MAX,
     ENEMY_BOX_ASPECT_MIN,
     ENEMY_BOX_MAX_AREA_RATIO,
@@ -40,8 +39,8 @@ from detect_common import (
 ASSET_DIR = "assets"
 ANCHOR_DIR = os.path.join(ASSET_DIR, "anchors")
 
-ANCHOR_SCALES = DEFAULT_ANCHOR_SCALES.copy()
-ANCHOR_THRESHOLD = DEFAULT_ANCHOR_THRESHOLD
+ANCHOR_SCALES = np.asarray(user_config.ANCHOR_SCALES, dtype=float)
+ANCHOR_THRESHOLD = float(user_config.ANCHOR_THRESHOLD)
 
 # Row/enemy geometry is shared from detect_common.py
 

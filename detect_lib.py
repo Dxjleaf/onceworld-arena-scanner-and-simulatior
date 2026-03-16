@@ -39,16 +39,17 @@ if user_config.TESSERACT_CMD:
 # Config
 # ============================================================
 
-ASSET_DIR = user_config.ASSET_DIR
-ANCHOR_DIR = user_config.ANCHOR_DIR
+ASSET_DIR = "assets"
+ANCHOR_DIR = os.path.join(ASSET_DIR, "anchors")
 
 # Multi-scale search ranges
 ANCHOR_SCALES = np.asarray(user_config.ANCHOR_SCALES, dtype=float)
 
 # Thresholds
 ANCHOR_THRESHOLD = float(user_config.ANCHOR_THRESHOLD)
-UNIT_THRESHOLD = float(user_config.UNIT_THRESHOLD)
-UNIT_MARGIN_THRESHOLD = float(user_config.UNIT_MARGIN_THRESHOLD)
+UNIT_THRESHOLD = 0.20
+UNIT_MARGIN_THRESHOLD = 0.02
+UNIT_WARN_THRESHOLD = 0.35
 
 # Model checkpoint
 CHECKPOINT_DIR = "checkpoints"
@@ -799,7 +800,8 @@ class App:
 
         self.text = tk.Text(root, wrap="word", font=("Consolas", 11))
         self.text.pack(fill="both", expand=True, padx=10, pady=10)
-        self.text.tag_configure("unknown", foreground="red")
+        self.text.tag_configure("row_red", foreground="red")
+        self.text.tag_configure("row_yellow", foreground="goldenrod")
 
         self.write("Ready.\n")
 
@@ -842,6 +844,7 @@ class App:
             self.write("team_a win prob: n/a\n")
             self.write("team_b win prob: n/a\n")
             self.write("team_c win prob: n/a\n")
+        self.write("\n")
         self.write("-" * 50 + "\n")
 
         for team in ["team_a", "team_b", "team_c"]:
@@ -863,16 +866,20 @@ class App:
             self.write("Units:\n")
             for i, u in enumerate(units, 1):
                 self.write(f"  {i}. ")
-                if u["unit_name"] == "unknown":
-                    self.text.insert("end", "unknown", ("unknown",))
-                    self.text.see("end")
-                else:
-                    self.write(f"{u['unit_name']}")
-                self.write(
+                row_text = (
+                    f"{u['unit_name']}"
                     f" | level={u['level']}"
                     f" | match={u['score']}"
                     f"\n"
                 )
+                if u["unit_name"] == "unknown":
+                    self.text.insert("end", row_text, ("row_red",))
+                    self.text.see("end")
+                elif u["score"] is not None and u["score"] < UNIT_WARN_THRESHOLD:
+                    self.text.insert("end", row_text, ("row_yellow",))
+                    self.text.see("end")
+                else:
+                    self.write(row_text)
             self.write("\n")
 
 

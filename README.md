@@ -13,11 +13,8 @@ Use this section if you only want to run detection.
 - Edit `user_config.py` only.
 - Main user knobs:
 - `TESSERACT_CMD` (optional, only if Tesseract is not in PATH)
-- `ASSET_DIR`, `ANCHOR_DIR`
 - `ANCHOR_SCALES`
 - `ANCHOR_THRESHOLD`
-- `UNIT_THRESHOLD`
-- `UNIT_MARGIN_THRESHOLD`
 
 ### Notes
 - Checkpoints are auto-detected from `checkpoints/` (latest `unit_resnet18_*.pt`).
@@ -48,6 +45,7 @@ Use this section for dataset collection, labeling, and training workflows.
 ### Shared internals
 - `detect_common.py` keeps shared detector geometry/constants to reduce drift between runtime and dev collection code.
 - `user_config.py` is intentionally minimal and end-user focused.
+- `ANCHOR_SCALES` and `ANCHOR_THRESHOLD` in `user_config.py` are used by both runtime detection and `dev_tools/ml_data.py`.
 
 ## Battle Simulation Credit
 

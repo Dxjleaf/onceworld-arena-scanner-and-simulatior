@@ -1,10 +1,5 @@
-import numpy as np
-
-# Shared detector defaults and geometry constants.
-# These are internal (developer-side) and intentionally not in user_config.py.
-
-DEFAULT_ANCHOR_SCALES = np.linspace(0.75, 1.35, 13)
-DEFAULT_ANCHOR_THRESHOLD = 0.72
+# Shared detector geometry constants used by both runtime and dev tools.
+# User-tunable anchor settings live in user_config.py.
 
 # Row box ratios relative to anchor size.
 ROW_X1 = -0.50
