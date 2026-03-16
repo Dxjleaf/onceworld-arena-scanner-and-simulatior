@@ -2,6 +2,7 @@ import os
 import re
 import csv
 import random
+import math
 from pathlib import Path
 import tkinter as tk
 from tkinter import ttk, messagebox
@@ -58,8 +59,8 @@ UNLABELED_ICON_PREFIX = "img"
 UNLABELED_ICON_DIGITS = 4
 BATTLE_MONSTERS_CSV = "monsters.csv"
 BATTLE_SIM_TRIALS = 120
-BATTLE_SIM_MAX_STEPS = 1200
-BATTLE_SIM_DELTA_TIME = 0.1
+BATTLE_SIM_DELTA_TIME = 0.02
+BATTLE_SIM_DURATION = 40.0
 
 # Row/enemy/coin geometry is shared from detect_common.py
 
@@ -579,6 +580,8 @@ class ScreenDetector:
                     m = Monster(t, dict(base), level=level)
 
                     placed = False
+                    nx = base_x
+                    ny = base_y
                     for _k in range(100):
                         nx = float(base_x + random.randint(-350, 350))
                         ny = float(base_y + random.randint(-350, 350))
@@ -587,7 +590,7 @@ class ScreenDetector:
 
                         overlap = False
                         for pm in all_placed:
-                            if float(np.hypot(nx - pm.x, ny - pm.y)) < 80.0:
+                            if math.hypot(nx - pm.x, ny - pm.y) < 80.0:
                                 overlap = True
                                 break
                         if not overlap:
@@ -597,16 +600,14 @@ class ScreenDetector:
                             break
 
                     if not placed:
-                        m.x = base_x
-                        m.y = base_y
+                        m.x = nx
+                        m.y = ny
 
                     teams[t].append(m)
                     all_placed.append(m)
 
             field = Field(teams)
-            for _step in range(BATTLE_SIM_MAX_STEPS):
-                if field.is_finished():
-                    break
+            while not field.is_finished() and field.time_elapsed < BATTLE_SIM_DURATION:
                 field.step(BATTLE_SIM_DELTA_TIME)
 
             winner = field.get_winner()
