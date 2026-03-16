@@ -361,7 +361,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Train static-icon classifier with in-memory augmentation.")
     parser.add_argument("--units-dir", type=str, default="assets/units")
     parser.add_argument("--real-dir", type=str, default="dataset_enemy_icons")
-    parser.add_argument("--real-train-ratio", type=float, default=0.8)
+    parser.add_argument("--real-train-ratio", type=float, default=0.9)
     parser.add_argument("--real-mix-ratio-train", type=float, default=0.5)
     parser.add_argument("--real-mix-ratio-val", type=float, default=1.0)
     parser.add_argument("--out-dir", type=str, default="checkpoints")
