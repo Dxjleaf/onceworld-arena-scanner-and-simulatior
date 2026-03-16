@@ -844,8 +844,8 @@ class App:
             self.write("team_a win prob: n/a\n")
             self.write("team_b win prob: n/a\n")
             self.write("team_c win prob: n/a\n")
-        self.write("\n")
         self.write("-" * 50 + "\n")
+        self.write("\n")
 
         for team in ["team_a", "team_b", "team_c"]:
             r = results.get(team, {})
